@@ -11,6 +11,7 @@ Na página [Releases](https://github.com/LucianoNeo/switch-remote-play/releases)
 Se estiver voltando da versão Frame Tap 1.1.0, remova do cartão SD os módulos `atmosphere/contents/0100000000000C20` e `atmosphere/contents/0100000000000C21`, além de `switch/switch-frame-tap`, `config/switch-frame-tap` e `atmosphere/exefs_patches/switch-frame-tap-sound` (se existir). Depois copie o conteúdo de [`Cartao_SD_Switch`](Cartao_SD_Switch) para a raiz do cartão microSD e reinicie o console no Atmosphère. Abra **SysDVR Settings** no Switch e selecione **TCP Bridge**. O aplicativo para PC já inicia nesse modo por padrão.
 
 Esta versão captura vídeo e áudio dos jogos; o menu HOME não é transmitido.
+Se o Windows não tiver uma saída de áudio WASAPI disponível, o app tenta manter o vídeo em modo silencioso; habilite uma saída de som e reconecte para recuperar o áudio.
 
 ## Uso no Windows
 

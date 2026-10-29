@@ -49,6 +49,8 @@ PASSO 2: NO COMPUTADOR (LIGAR E JOGAR)
    - Clique no botão verde: "▶ CONECTAR E JOGAR".
 4. A janela de vídeo e o som aparecerão quando um jogo compatível estiver aberto; o
    controle do PC já estará comandando o Switch. O menu HOME não é transmitido nesta versão.
+   Se o Windows não encontrar uma saída de áudio WASAPI, o app tenta continuar com vídeo
+   sem áudio. Habilite uma saída de som no Windows e reconecte para recuperar o áudio.
 
 --------------------------------------------------------------------------------
 ATALHOS DURANTE O JOGO:

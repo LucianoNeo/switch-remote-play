@@ -522,40 +522,56 @@ class RemotePlayApp:
         self.input_thread = threading.Thread(target=self.gamepad_loop, args=(ip, session_id), daemon=True)
         self.input_thread.start()
 
+        self.watch_player_process(process, session_id, player_choice, ip)
+
+    def watch_player_process(self, process, session_id, player_choice, ip, video_only=False):
+        audio_endpoint_error = threading.Event()
+        output_finished = threading.Event()
+
         def capture_player_output():
-            if process.stdout is None:
-                return
-            audio_endpoint_error = False
             try:
+                if process.stdout is None:
+                    return
                 for line in process.stdout:
                     output = line.rstrip()
-                    if output:
-                        self.log_message(f"PLAYER: {output}")
-                        output_lower = output.lower()
-                        if player_choice == "sysdvr" and "wasapi" in output_lower and "endpoint" in output_lower:
-                            audio_endpoint_error = True
-                        if player_choice == "sysdvr" and "player creation failed" in output_lower:
-                            if audio_endpoint_error:
-                                failure = (
-                                    "O Windows não encontrou uma saída de áudio WASAPI. "
-                                    "Conecte ou habilite caixas de som ou um headset nas configurações de som "
-                                    "e tente novamente."
-                                )
-                            else:
-                                failure = "O SysDVR-Client não conseguiu criar a janela do player. Consulte remote_play.log."
-                            self.root.after(
-                                0,
-                                lambda message=failure: self.handle_player_startup_failure(
-                                    session_id, process, message
-                                ),
-                            )
-                            return
+                    if not output:
+                        continue
+                    self.log_message(f"PLAYER: {output}")
+                    output_lower = output.lower()
+                    if player_choice == "sysdvr" and "wasapi" in output_lower and "endpoint" in output_lower:
+                        audio_endpoint_error.set()
+                        self.log_message("Saída de áudio WASAPI indisponível; o vídeo será reiniciado sem áudio.")
+                    if (
+                        player_choice == "sysdvr"
+                        and "player creation failed" in output_lower
+                        and not audio_endpoint_error.is_set()
+                    ):
+                        failure = "O SysDVR-Client não conseguiu criar a janela do player. Consulte remote_play.log."
+                        self.root.after(
+                            0,
+                            lambda message=failure: self.handle_player_startup_failure(
+                                session_id, process, message
+                            ),
+                        )
+                        return
             except Exception as e:
                 self.log_message(f"Não foi possível ler a saída do player: {e}")
+            finally:
+                output_finished.set()
 
         def monitor_video():
             return_code = process.wait()
+            output_finished.wait(timeout=2.0)
             self.log_message(f"Player encerrado com código {return_code}.")
+            if player_choice == "sysdvr" and audio_endpoint_error.is_set() and not video_only:
+                try:
+                    self.root.after(
+                        0,
+                        lambda: self.start_sysdvr_video_only(session_id, process, ip),
+                    )
+                except Exception:
+                    pass
+                return
             if self.video_process is process:
                 self.video_process = None
             try:
@@ -565,6 +581,46 @@ class RemotePlayApp:
 
         threading.Thread(target=capture_player_output, daemon=True).start()
         threading.Thread(target=monitor_video, daemon=True).start()
+
+    def start_sysdvr_video_only(self, session_id, failed_process, ip):
+        if (
+            not self.is_running
+            or session_id != self._player_session
+            or self.video_process is not failed_process
+        ):
+            return
+
+        cmd = [SYSDVR_CLIENT_PATH, "bridge", ip, "--no-audio", "--legacy"]
+        if self.fullscreen_var.get():
+            cmd.append("--fullscreen")
+        player_env = os.environ.copy()
+        player_env.pop("SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS", None)
+        try:
+            process = subprocess.Popen(
+                cmd,
+                cwd=APP_DIR,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                bufsize=1,
+                env=player_env,
+            )
+        except Exception as e:
+            self.log_message(f"Falha ao iniciar SysDVR apenas com vídeo: {e}")
+            self.video_process = None
+            self.stop_remote_play("Não foi possível iniciar o vídeo. Consulte remote_play.log.", error=True)
+            messagebox.showerror("Falha ao abrir vídeo", str(e))
+            return
+
+        self.video_process = process
+        self.status_bar.config(
+            text="Vídeo iniciado sem áudio: o Windows não encontrou uma saída WASAPI. Habilite uma saída de som e reconecte para recuperar o áudio.",
+            fg="#ffaa00",
+        )
+        self.log_message("SysDVR reiniciado em modo somente vídeo para evitar fechar a transmissão.")
+        self.watch_player_process(process, session_id, "sysdvr", ip, video_only=True)
 
     def handle_player_startup_failure(self, session_id, process, message):
         if not self.is_running or session_id != self._player_session or self.video_process is not process:
