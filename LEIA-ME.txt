@@ -9,18 +9,23 @@ pelo PC com áudio, vídeo e controle conectado no computador, tudo via Wi-Fi.
 PASSO 1: CONFIGURAÇÃO NO NINTENDO SWITCH (FAÇA APENAS UMA VEZ)
 --------------------------------------------------------------------------------
 1. Pegue o cartão micro SD do seu Switch ou conecte o console no PC via DBI (MTP Responder).
-2. Abra a pasta:
+2. Se estiver voltando da versão Frame Tap 1.1.0, remova do cartão SD os módulos
+   `atmosphere/contents/0100000000000C20` e `atmosphere/contents/0100000000000C21`,
+   além de `switch/switch-frame-tap`, `config/switch-frame-tap` e
+   `atmosphere/exefs_patches/switch-frame-tap-sound` (se existir). Isso evita que
+   os módulos disputem a captura e que patches antigos permaneçam ativos.
+3. Abra a pasta:
    "Cartao_SD_Switch" (ou extraia o arquivo "Switch_SD_Cartao_Pronto.zip")
-3. Copie o conteúdo para a raiz do cartão micro SD do Switch:
+4. Copie o conteúdo para a raiz do cartão micro SD do Switch:
    - atmosphere/
    - config/
    - switch/
    (Se o Windows perguntar se deseja mesclar/substituir pastas, clique em SIM).
-4. Insira o micro SD de volta no Switch e ligue o console normalmente no Atmosphere.
+5. Insira o micro SD de volta no Switch e ligue o console normalmente no Atmosphere.
    * O SysDVR e o sys-botbase iniciam sozinhos em segundo plano.
    * O pacote inicia no modo RTSP simples. Para usar TCP Bridge, abra o aplicativo
      SysDVR Settings no Switch e selecione "TCP Bridge". Faça isso uma vez.
-5. No Switch, vá em: Configurações do Console -> Internet e veja o seu "Endereço IP"
+6. No Switch, vá em: Configurações do Console -> Internet e veja o seu "Endereço IP"
    (Exemplo: 192.168.1.150).
 
 --------------------------------------------------------------------------------
@@ -36,14 +41,14 @@ PASSO 2: NO COMPUTADOR (LIGAR E JOGAR)
    - Use "Testar Conexão" para conferir as portas de controle e vídeo do modo escolhido.
    - Veja se o status do controle está verde (ex: "🟢 Conectado: Xbox Wireless Controller").
    - Escolha o Layout dos botões que você prefere (Layout Switch ou Layout Xbox).
-   - Para usar o modo recomendado TCP Bridge, selecione "SysDVR Client (TCP Bridge)".
-     Esse modo exige que o Switch também esteja configurado como "TCP Bridge".
+   - O modo padrão é "SysDVR Client (TCP Bridge)". O Switch também precisa estar
+     configurado como "TCP Bridge" no app SysDVR Settings.
      O app usa o player legado do SysDVR para impedir que a interface do player também
      receba os botões do controle enquanto o app envia os comandos ao Switch.
      Para o modo RTSP padrão, escolha MPV e teste TCP ou UDP se houver atraso.
    - Clique no botão verde: "▶ CONECTAR E JOGAR".
 4. A janela de vídeo e o som aparecerão quando um jogo compatível estiver aberto; o
-   controle do PC já estará comandando o Switch.
+   controle do PC já estará comandando o Switch. O menu HOME não é transmitido nesta versão.
 
 --------------------------------------------------------------------------------
 ATALHOS DURANTE O JOGO:

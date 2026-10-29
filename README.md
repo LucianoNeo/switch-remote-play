@@ -8,13 +8,15 @@ Na página [Releases](https://github.com/LucianoNeo/switch-remote-play/releases)
 
 ## Configuração do Switch
 
-Copie o conteúdo de [`Cartao_SD_Switch`](Cartao_SD_Switch) para a raiz do cartão microSD do Switch e reinicie o console no Atmosphère. O SysDVR e o sys-botbase iniciam em segundo plano. Para usar o modo de menor latência, abra o SysDVR Settings no Switch e selecione **TCP Bridge**.
+Se estiver voltando da versão Frame Tap 1.1.0, remova do cartão SD os módulos `atmosphere/contents/0100000000000C20` e `atmosphere/contents/0100000000000C21`, além de `switch/switch-frame-tap`, `config/switch-frame-tap` e `atmosphere/exefs_patches/switch-frame-tap-sound` (se existir). Depois copie o conteúdo de [`Cartao_SD_Switch`](Cartao_SD_Switch) para a raiz do cartão microSD e reinicie o console no Atmosphère. Abra **SysDVR Settings** no Switch e selecione **TCP Bridge**. O aplicativo para PC já inicia nesse modo por padrão.
+
+Esta versão captura vídeo e áudio dos jogos; o menu HOME não é transmitido.
 
 ## Uso no Windows
 
 1. Conecte o controle ao PC.
 2. Abra `SwitchRemotePlay_PC/NintendoSwitchRemotePlay.exe`.
-3. Informe o endereço IP do Switch e selecione o modo de vídeo correspondente à configuração do console.
+3. Informe o endereço IP do Switch. O player **SysDVR Client (TCP Bridge)** já vem selecionado; confirme que o Switch também está em TCP Bridge.
 4. Clique em **Conectar e Jogar**.
 
 O IP e as demais preferências são salvos localmente em `SwitchRemotePlay_PC/config.json`; esse arquivo não é enviado ao repositório.

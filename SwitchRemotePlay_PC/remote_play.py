@@ -141,7 +141,7 @@ class RemotePlayApp:
             "layout": "nintendo", # "nintendo" ou "xbox"
             "deadzone": 0.08,
             "transport": "tcp",   # "tcp" ou "udp"
-            "player": "mpv",      # "mpv", "ffplay" ou "sysdvr"
+            "player": "sysdvr",   # SysDVR TCP Bridge é o player padrão desta versão
             "fullscreen": False
         }
         if os.path.exists(CONFIG_FILE):
