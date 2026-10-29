@@ -1,0 +1,12 @@
+SwitchRemotePlay_PC/config.json
+SwitchRemotePlay_PC/*.log
+player_debug.log
+mpv_debug.log
+__pycache__/
+*.py[cod]
+build/
+dist/
+*.spec
+tools/
+SwitchRemotePlay_PC/NintendoSwitchRemotePlay.exe
+Switch_SD_Cartao_Pronto.zip

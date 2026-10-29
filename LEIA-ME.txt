@@ -1,0 +1,60 @@
+================================================================================
+          NINTENDO SWITCH REMOTE PLAY (ALL-IN-ONE) - GUIA DE USO
+================================================================================
+
+Este pacote junta TUDO o que você precisa para jogar seu Nintendo Switch remotamente
+pelo PC com áudio, vídeo e controle conectado no computador, tudo via Wi-Fi.
+
+--------------------------------------------------------------------------------
+PASSO 1: CONFIGURAÇÃO NO NINTENDO SWITCH (FAÇA APENAS UMA VEZ)
+--------------------------------------------------------------------------------
+1. Pegue o cartão micro SD do seu Switch ou conecte o console no PC via DBI (MTP Responder).
+2. Abra a pasta:
+   "Cartao_SD_Switch" (ou extraia o arquivo "Switch_SD_Cartao_Pronto.zip")
+3. Copie o conteúdo para a raiz do cartão micro SD do Switch:
+   - atmosphere/
+   - config/
+   - switch/
+   (Se o Windows perguntar se deseja mesclar/substituir pastas, clique em SIM).
+4. Insira o micro SD de volta no Switch e ligue o console normalmente no Atmosphere.
+   * O SysDVR e o sys-botbase iniciam sozinhos em segundo plano.
+   * O pacote inicia no modo RTSP simples. Para usar TCP Bridge, abra o aplicativo
+     SysDVR Settings no Switch e selecione "TCP Bridge". Faça isso uma vez.
+5. No Switch, vá em: Configurações do Console -> Internet e veja o seu "Endereço IP"
+   (Exemplo: 192.168.1.150).
+
+--------------------------------------------------------------------------------
+PASSO 2: NO COMPUTADOR (LIGAR E JOGAR)
+--------------------------------------------------------------------------------
+1. Conecte o seu controle (Xbox, PlayStation, Switch Pro, 8BitDo ou genérico) no PC.
+2. Dê dois cliques no executável:
+   "SwitchRemotePlay_PC\NintendoSwitchRemotePlay.exe"
+   O executável já inclui Python e pygame; não é necessário instalar Python nem abrir o BAT.
+   Mantenha a pasta "tools" ao lado de "SwitchRemotePlay_PC" para os players de vídeo.
+3. Na janela do aplicativo:
+   - Digite o IP do Switch (o aplicativo salvará o IP para você nunca mais ter que digitar!).
+   - Use "Testar Conexão" para conferir as portas de controle e vídeo do modo escolhido.
+   - Veja se o status do controle está verde (ex: "🟢 Conectado: Xbox Wireless Controller").
+   - Escolha o Layout dos botões que você prefere (Layout Switch ou Layout Xbox).
+   - Para usar o modo recomendado TCP Bridge, selecione "SysDVR Client (TCP Bridge)".
+     Esse modo exige que o Switch também esteja configurado como "TCP Bridge".
+     O app usa o player legado do SysDVR para impedir que a interface do player também
+     receba os botões do controle enquanto o app envia os comandos ao Switch.
+     Para o modo RTSP padrão, escolha MPV e teste TCP ou UDP se houver atraso.
+   - Clique no botão verde: "▶ CONECTAR E JOGAR".
+4. A janela de vídeo e o som aparecerão quando um jogo compatível estiver aberto; o
+   controle do PC já estará comandando o Switch.
+
+--------------------------------------------------------------------------------
+ATALHOS DURANTE O JOGO:
+--------------------------------------------------------------------------------
+- MPV/FFplay: tecla [F] alterna entre janela e tela cheia.
+- SysDVR Client: tecla [F11] alterna entre janela e tela cheia.
+- Tecla [ESC] ou fechar a janela: Encerra o Remote Play com segurança.
+
+DICA DE REDE:
+Para reduzir atraso e falhas, conecte o PC ao roteador por cabo e o Switch ao Wi-Fi
+5 GHz, próximo ao roteador. Se ambos usarem Wi-Fi, deixe-os na mesma rede local e
+teste TCP e UDP no aplicativo: o melhor transporte depende da qualidade do sinal.
+Velocidade da internet não melhora o streaming local.
+================================================================================
